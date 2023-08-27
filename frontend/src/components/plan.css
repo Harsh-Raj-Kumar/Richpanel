@@ -1,0 +1,27 @@
+.Container{
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+}
+
+.PContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    height: 100vh;
+    padding: 2rem;
+    /* border: 1px solid red; */
+}
+
+.planContainer {
+    width: 60em;
+    /* border: 1px solid green; */
+}
+
+/* 
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+} */
+

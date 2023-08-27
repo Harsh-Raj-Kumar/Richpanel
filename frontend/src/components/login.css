@@ -1,0 +1,108 @@
+.LContainer {
+    width: 100vw;
+    height: 100vh;
+    background-color: #004e96;
+}
+
+.loginContainer {
+    width: 24%;
+    height: 64%;
+    padding: 20px 30px;
+    border-radius: 18px;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin:auto;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* border : 1px solid yellow; */
+}
+
+.Top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: large;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* border : 1px solid red; */
+}
+
+.Middle {
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    /* overflow: hidden; */
+    /* align-items: center;
+    justify-content: space-between; */
+    /* border : 1px solid green; */
+}
+
+.middleItem {
+    width: 100%;
+    margin-bottom: 12px;
+    /* border : 1px solid black; */
+}
+
+.middleItem input {
+    width: 100%;
+    /*make input doesnt overflow inside div*/
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    /*make input doesnt overflow inside div*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2px 0;
+    padding: 5px;
+}
+
+.middleItem label {
+    font-weight: 500;
+}
+
+.RememberMe {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.loginBtn {
+    width: 100%;
+    height: 35px;
+    border: none;
+    padding: 5px;
+    border-radius: 1.5px;
+    color: white;
+    background-color: #004e96;
+    cursor: pointer;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.Bottom {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-top: 10px;
+    /* border : 1px solid red; */
+}
+
+.BottomLink {
+    margin-left: 6px;
+    color: blue;
+    text-decoration: none;
+}
+
+
+
