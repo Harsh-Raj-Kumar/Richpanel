@@ -54,7 +54,7 @@ const getLatestOffers = async (req, res) => {
     }
 }
 
-
+// stripe
 const paymentIntent = async(req, res) => {
     try{
         const intent = await stripe.paymentIntents.create({
@@ -70,6 +70,7 @@ const paymentIntent = async(req, res) => {
     }
 }
 
+// Stripe
 const subscribe = async (req, res) => {
     try{
         const { name, email, paymentMethod, priceId} = req.body;
@@ -133,6 +134,8 @@ const cancel = async (req, res) => {
         });
     }
 }
+
+
 module.exports = {
     getLatestOffers,
     paymentIntent,

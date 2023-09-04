@@ -47,7 +47,7 @@ function PaymentDetails({selectedPlan}) {
           console.log(paymentMethod);
 
           const response = await axios.post("http://localhost:8800/api/bills/subscribe", {
-            name : localStorage.getItem("name"),
+            name : localStorage.getItem("username"),
             email : localStorage.getItem("email"),
             priceId: selectedPlan.priceId,
             paymentMethod: paymentMethod.paymentMethod.id,

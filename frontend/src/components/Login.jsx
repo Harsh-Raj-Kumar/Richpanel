@@ -23,22 +23,38 @@ function Login({setSelectedPlan}) {
       return;
   }
   console.log({email, password, remember});
+  try{
+    // const res = await axios.post("http://localhost:8800/api/users",{email : email});
+    // console.log("This is the email : ",email);
+    
+    // ######## NOTES #######
+    // in Get request we can't havce Body
+    // But if we want to send some data then we can send url only by Query format
+    // in Url AFTER ? QUEY IS WRITTEM IN KEY AND VALUE PAIR
+    const res = await axios.get(`http://localhost:8800/api/users?key=${email}`);
+    localStorage.setItem('username', res.data);
+    // console.log("Hi my name is :",res.data);
+  }
+  catch(err) {
+     console.log("Couldn't find username in database",err);
+  }
+
   await axios.post('http://localhost:8800/api/users/login', {
       email: email,
       password: password
   }).then( async (res) => {
       if(res.data.msg === "User logged in successfully"){
-        console.log(res.data);
+        // console.log(res.data);
           localStorage.setItem('email', email);
-          localStorage.setItem('username', res.data.username);
+          // localStorage.setItem('username', res.data.username);
           localStorage.setItem('current_plan', res.data.current_plan);
           localStorage.setItem('subscriptionId', res.data.subscriptionId);
           localStorage.setItem('cancelled', res.data.cancelled);
           localStorage.setItem('planType', res.data.planType);
           // try{
-          //   const Name = await axios.get(`http://localhost:8800/api/users/${email}`);
-
+          //   const Name = await axios.post("http://localhost:8800/api/users",email);
           //   localStorage.setItem('username', Name);
+          //   console.log("Hi my name is :",Name);
           // }catch(err) {
           //    console.log("Couldn't find username in database",err);
           // }
@@ -47,7 +63,7 @@ function Login({setSelectedPlan}) {
               navigate("/currentPlan");
               return;
           }
-          console.log(res.data);
+          // console.log(res.data);
           navigate("/plan");
           
       } else{

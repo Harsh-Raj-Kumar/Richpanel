@@ -129,11 +129,17 @@ const updateCurrentPlan = async (req, res) => {
 
 const getName = async (req,res) => {
     try {
-        console.log(req.params.email);
-        const userFound = await User.findOne({email : req.params.email});
-        console.log(userFound);
+        // console.log("email is",req.query.key);
+        
+        // ####### NOTES #########
+        // IF data is send in query form then req.query.key
+        // IF data is send in id then req.params.id
+        // IF data is send in body then req.body.email
+        const userFound = await User.findOne({email: req.query.key});
+        // console.log("userfound is",userFound);
         res.status(200).json(userFound.username);
     } catch (error) {
+        // console.log("got in backend catch");
         res.status(500).json(error);
     }
 }

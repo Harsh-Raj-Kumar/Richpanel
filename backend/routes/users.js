@@ -7,7 +7,8 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 router.post("/updateCurrentPlan", updateCurrentPlan);
-// router.get("/:email",getName);
+// router.post("/",getName);
+router.get("/",getName);
 
 module.exports = router;
 

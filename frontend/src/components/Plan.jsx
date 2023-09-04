@@ -82,9 +82,7 @@ function PlansComponent({setSelectedPlan}) {
                                             planName={plan.planName}
                                             id={i}
                                             currentSelected={currentSelected}
-                                            setCurrentSelected={
-                                                setCurrentSelected
-                                            }
+                                            setCurrentSelected={setCurrentSelected}
                                         />
                                     </TableCell>
                                 ))}

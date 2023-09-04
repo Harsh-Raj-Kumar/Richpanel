@@ -8,7 +8,6 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const morgan = require('morgan');
 const path = require('path');
-
 const app = express();
 const userRoute = require("./routes/users.js");
 const userBill = require("./routes/bills.js");
@@ -38,9 +37,10 @@ app.use(cors({
 app.use("/api/users", userRoute);
 app.use("/api/bills", userBill);
 
-// app.use(express.static(path.join(__dirname, './frontend/dist')));
+
+// app.use(express.static(path.join(__dirname, './frontend/build')));
 // app.use('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '/.frontend/dist/index.html'));
+//     res.sendFile(path.join(__dirname, '/.frontend/build/index.html'));
 // });
 
 
