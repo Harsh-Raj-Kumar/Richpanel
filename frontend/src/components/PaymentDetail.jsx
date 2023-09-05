@@ -38,40 +38,74 @@ function PaymentDetails({selectedPlan}) {
           // Make sure to disable form submission until Stripe.js has loaded.
           return;
         }
-
+        // console.log("stripe is : ",stripe);
+        // console.log("element is : ",elements);
+        // console.log("Card Element is : ",CardElement);
         try {
           const paymentMethod = await stripe.createPaymentMethod({
             card: elements.getElement(CardElement),
             type: "card",
           });
-          console.log(paymentMethod);
+          // console.log("Creeated Payment method while creating Subscription",paymentMethod);
 
-          const response = await axios.post("http://localhost:8800/api/bills/subscribe", {
-            name : localStorage.getItem("username"),
-            email : localStorage.getItem("email"),
-            priceId: selectedPlan.priceId,
-            paymentMethod: paymentMethod.paymentMethod.id,
-          });
+          try {
+              const sub = {
+                name : localStorage.getItem("username"),
+                email : localStorage.getItem("email"),
+                paymentMethod: paymentMethod.paymentMethod.id,
+                priceId: selectedPlan.priceId,
+                // planType: localStorage.getItem("planType")
+              }
+              // console.log("These is the object which need to go in subscription ",sub);
+            const response = await axios.post("http://localhost:8800/api/bills/subscribe",sub);
+
+            if (!response.data.clientSecret) return alert("Payment unsuccessful!");
+            const data = await response.data;
+            const confirm = await stripe.confirmCardPayment(data.clientSecret);
+            if (confirm.error) return alert("Payment unsuccessful!");
+
+            // Updation in db as well as local storage
+                 try {
+                     await axios.post("http://localhost:8800/api/users/updateCurrentPlan", {
+                     email : localStorage.getItem("email"),
+                     planName : selectedPlan.planName,
+                     subscriptionId : response.data.subscriptionId,
+                     planType : selectedPlan.planType,
+                   });
+                    localStorage.setItem("cancelled", "false");
+                    localStorage.setItem("subscriptionId", response.data.subscriptionId);
+                    localStorage.setItem('current_plan',  selectedPlan.planName);
+                    localStorage.setItem('planType', selectedPlan.planType);
+                    const amount =  selectedPlan.planType === 'Monthly' ? 
+                    selectedPlan.MonthlyPrice : selectedPlan.yearlyPrice;
+                    localStorage.setItem('amount', amount);
+
+
+                    navigate("/currentPlan");
+                    alert("Payment Successful! Subscription active.");
+
+                        // adding bill to db
+                        const Bill = {
+                          email : localStorage.getItem("email"),
+                          amount: localStorage.getItem("amount"),
+                          plan : selectedPlan.planName,
+                          payment_id : paymentMethod.paymentMethod.id
+                        }
+                           try {
+                             await axios.post("http://localhost:8800/api/bills/createBill",Bill);
+                             console.log("Succefully posted Bill in database");
+                           }catch(err) {
+                             console.log("Couldn't post Bill",err);
+                           }
+
+                 } catch(err) {
+                    console.log("Couldn't update current plan",err);
+                 }
+
+          } catch (err) {
+            console.log("Couldn't post to subscribe",err);
+          }
           
-          if (!response.data.clientSecret) return alert("Payment unsuccessful!");
-          const data = await response.data;
-          const confirm = await stripe.confirmCardPayment(data.clientSecret);
-          if (confirm.error) return alert("Payment unsuccessful!");
-
-          //Sucess
-          //Call API to store data in db
-
-          
-          await axios.post("http://localhost:8800/api/users/updateCurrentPlan", {
-              email : localStorage.getItem("email"),
-              planName : selectedPlan.planName,
-              subscriptionId : response.data.subscriptionId,
-              planType : selectedPlan.planType,
-            });
-            localStorage.setItem("subscriptionId", response.data.subscriptionId);
-
-          navigate("/currentPlan");
-          alert("Payment Successful! Subscription active.");
         } catch (err) {
           console.error(err);
           alert("Payment failed! " + err.message);

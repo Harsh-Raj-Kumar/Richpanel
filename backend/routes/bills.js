@@ -1,14 +1,15 @@
 const express = require("express");
-const { getLatestOffers, paymentIntent, subscribe, cancel, } = require("../controllers/Bill.js");
+const { Plans, paymentIntent, Subscribe, Cancel, CreateBill} = require("../controllers/Bill.js");
 
 
 const router = express.Router();
 
 
-router.get("/getLatestOffers", getLatestOffers);
-router.get("/paymentIntent", paymentIntent);
-router.post("/subscribe", subscribe);
-router.post("/cancel", cancel);
+router.get("/plans", Plans);
+router.post("/createBill",CreateBill);
+router.post("/subscribe", Subscribe);
+router.post("/cancel", Cancel);
+
 
 module.exports = router;
 

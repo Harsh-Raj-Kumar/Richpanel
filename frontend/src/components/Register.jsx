@@ -12,6 +12,7 @@ function Register() {
   const passwordRef = useRef();
 
   const navigate = useNavigate();
+
   const handleFormSubmit = async (e) => {
     try {
         const newUser = {
@@ -19,7 +20,6 @@ function Register() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         };
-
         e.preventDefault();
         console.log("Inside frontend route");
         await axios.post("http://localhost:8800/api/users/register", newUser);

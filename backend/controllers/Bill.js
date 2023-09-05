@@ -1,7 +1,8 @@
-const stripe = require('stripe')('sk_test_51KCJrzSErffaDKeGy6S369jDMEszJ3UDNkB9ed6nqdRieuoLP6NQOgAJ1GgcUBRDBUM8n63PP4ZO12iW9jWqUS5W00XqSWNuGM');
+const stripe = require('stripe')('sk_test_51Nj2QSSHOu8Dft9pkKKnbHbsodsSozVm1tqv27ZmNkWkRJEBBkgYvLKDnoxdzcyPjzrJwcZJlW7z1OAPn6M82QSg00cAiSnKfM');
 const User = require('../models/user.js');
+const Bill = require('../models/bill.js');
 
-const getLatestOffers = async (req, res) => {
+const Plans = async (req, res) => {
     try{
         console.log("Billing details returned");
         res.status(200).send({
@@ -14,8 +15,8 @@ const getLatestOffers = async (req, res) => {
                     "MonthlyPrice" : "₹ 100",
                     "yearlyPrice" : "₹ 1000",
                     "devices" : ["Phone", "Tablet"],
-                    "mId" : "price_1NbzdHSErffaDKeGV2EYkHoz",
-                    "yId" : "price_1Nbze0SErffaDKeGD0w3ANJf"
+                    "mId" : "price_1NmtU9SHOu8Dft9pklopgCEO",
+                    "yId" : "price_1Nmub0SHOu8Dft9pDU645q5m"
                 },{
                     "planName" : "Basic",
                     "videoQuality" : "Good",
@@ -23,8 +24,8 @@ const getLatestOffers = async (req, res) => {
                     "MonthlyPrice" : "₹ 200",
                     "yearlyPrice" : "₹ 2000",
                     "devices" : ["Phone", "Tablet", "Computer", "TV"],
-                    "mId" : "price_1NbzeSSErffaDKeG0XkPTHAS",
-                    "yId" : "price_1NbzejSErffaDKeGe3KrRrA6"
+                    "mId" : "price_1NmubCSHOu8Dft9prQ5AM5ud",
+                    "yId" : "price_1NmubXSHOu8Dft9pYp66FV0x"
                 },{
                     "planName" : "Standard",
                     "videoQuality" : "Better",
@@ -32,17 +33,17 @@ const getLatestOffers = async (req, res) => {
                     "MonthlyPrice" : "₹ 500",
                     "yearlyPrice" : "₹ 5000",
                     "devices" : ["Phone", "Tablet", "Computer", "TV"],
-                    "mId" : "price_1Nc1TuSErffaDKeGRZxyNtQq",
-                    "yId" : "price_1Nc1VHSErffaDKeGdiD7OQCS"
+                    "mId" : "price_1NmubnSHOu8Dft9paAponoaT",
+                    "yId" : "price_1NmucMSHOu8Dft9psvhpbhCr"
                 },{
-                    "planName" : "Premimum",
+                    "planName" : "Premium",
                     "videoQuality" : "Best",
                     "Resolution" : "4k+HDR",
                     "MonthlyPrice" : "₹ 700",
                     "yearlyPrice" : "₹ 7000",
                     "devices" : ["Phone", "Tablet", "Computer", "TV"],
-                    "mId" : "price_1Nc1UPSErffaDKeGp78A5KoV",
-                    "yId" : "price_1Nc1UxSErffaDKeG27W2bFsa"
+                    "mId" : "price_1NmuerSHOu8Dft9pXBMdQT7x",
+                    "yId" : "price_1NmufBSHOu8Dft9pyeCB0wgy"
                 }
             ]
         });
@@ -54,27 +55,13 @@ const getLatestOffers = async (req, res) => {
     }
 }
 
-// stripe
-const paymentIntent = async(req, res) => {
-    try{
-        const intent = await stripe.paymentIntents.create({
-            amount: parseInt(req.query.amount.split('₹')[1].split(' ')[1])*100,
-            currency: 'inr',
-            // Verify your integration in this guide by including this parameter
-            metadata: {integration_check: 'accept_a_payment'},
-          }); // ... Fetch or create the PaymentIntent
-        res.status(200).send({client_secret: intent.client_secret});  
-    } catch(err){
-        console.log(err);
-        console.log("Stripe is down");
-    }
-}
 
 // Stripe
-const subscribe = async (req, res) => {
+const Subscribe = async (req, res) => {
+    const { name, email, paymentMethod, priceId} = req.body;
+    // console.log("Details came in backend inside subscribe",name, email, paymentMethod);
     try{
-        const { name, email, paymentMethod, priceId} = req.body;
-        console.log(name, email, paymentMethod);
+        
         const customer = await stripe.customers.create({
             email,
             name,
@@ -94,7 +81,7 @@ const subscribe = async (req, res) => {
             expand: ["latest_invoice.payment_intent"],
         });
 
-        console.log(subscription.latest_invoice.payment_intent.client_secret)
+        // console.log("After Subscription client_secret",subscription.latest_invoice.payment_intent.client_secret)
 
         res.status(200).send({
             message: "Subscription successfully initiated",
@@ -111,7 +98,7 @@ const subscribe = async (req, res) => {
     }
 }
 
-const cancel = async (req, res) => {
+const Cancel = async (req, res) => {
 
     const subscription = await stripe.subscriptions.update(req.body.subscriptionId, {
         cancel_at_period_end: true,
@@ -135,10 +122,27 @@ const cancel = async (req, res) => {
     }
 }
 
+const CreateBill = async (req, res) => {
+    // const { email, amount, plan, paymentId} = req.body;
+    const newBill = new Bill({
+        email : req.body.email,
+        amount : req.body.amount,
+        plan : req.body.plan,
+        payment_id : req.body.payment_id
+    });
+    // console.log("Inside backend Bill",newBill);
+    try {
+        const savedBill = await newBill.save();
+        res.status(200).json(savedBill);        
+    }catch(err) {
+        res.status(500).json(err);
+    }
+}
+
 
 module.exports = {
-    getLatestOffers,
-    paymentIntent,
-    subscribe,
-    cancel,
+    Plans,
+    Subscribe,
+    Cancel,
+    CreateBill
 }

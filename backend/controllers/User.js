@@ -31,8 +31,8 @@ const plans = {
         "mId" : "price_1Nc1TuSErffaDKeGRZxyNtQq",
         "yId" : "price_1Nc1VHSErffaDKeGdiD7OQCS"
     },
-    "Premimum" : {
-        "planName" : "Premimum",
+    "Premium" : {
+        "planName" : "Premium",
         "videoQuality" : "Best",
         "Resolution" : "4k+HDR",
         "MonthlyPrice" : "₹ 700",
@@ -48,10 +48,10 @@ const register =  async (req, res) => {
             email: req.body.email,
             password: req.body.password,
         });
-        console.log(newUser);
+        // console.log(newUser);
     
         try {
-            console.log("Backened");
+            // console.log("Backened");
             const savedUser = await newUser.save();
             res.status(200).json(savedUser);
         } catch (error) {

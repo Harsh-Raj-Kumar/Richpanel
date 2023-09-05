@@ -12,18 +12,18 @@ export default function CurrentPlan({plan}) {
     const [planType, setPlanType] = useState("Monthly");
     
     useEffect(()=>{
-        console.log("plan", plan);
+        console.log("plan inside Current plan", plan);
         if(plan?.planName == null){
             navigate("/plan")
         }
-        console.log(localStorage.getItem("cancelled"));
+        // console.log(localStorage.getItem("cancelled"));
         setActive(localStorage.getItem("cancelled") == "false" ? true : false);
         setPlanType(plan.planType == undefined ? localStorage.getItem("planType") : plan.planType);
     }, []);
 
     const printing = () => {
         navigate("/plan")
-        console.log("plan", plan);
+        // console.log("plan", plan);
         console.log(new Date().addMonths(1));
     }
 
@@ -33,6 +33,10 @@ export default function CurrentPlan({plan}) {
             email : localStorage.getItem("email"),
         }).then(() => {
             localStorage.removeItem("subscriptionId");
+            localStorage.removeItem("current_plan");
+            localStorage.removeItem("planType");
+            localStorage.removeItem("amount");
+            localStorage.setItem("cancelled", "true");
             setActive(false);
         });
     }
@@ -143,7 +147,7 @@ function ActiveTag({ label, className }) {
             className={[
                 "text-center rounded-md px-2 py-1 text-sm font-medium tracking-wider",
                 className,
-            ].join(" ")}
+            ].join("   ")}
         >
             {label}
         </div>

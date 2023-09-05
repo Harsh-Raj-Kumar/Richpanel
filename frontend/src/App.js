@@ -10,12 +10,13 @@ import {loadStripe} from '@stripe/stripe-js';
 import './App.css';
 
 
-const stripePromise = loadStripe("pk_test_51KCJrzSErffaDKeGadUmT0RbuyDuELKJxSFLAV1EyUbCDAhv7iWk89MS50m1LdctWvX3rWFVw8dTsRksFXFrp5Ur00laYwz88H");
+const stripePromise = loadStripe("pk_test_51Nj2QSSHOu8Dft9pwaD7zjM3kKjUHBSfVyGc1ZG8mmQ9iDWsGjXFlotsebHqSZxpDrRhX1FRIIodP72FSMOqEPJG00tG3P5BmN");
 
 
 function App() {
 
   const [selectedPlan, setSelectedPlan] = useState({});
+
 
   return (
     <BrowserRouter>

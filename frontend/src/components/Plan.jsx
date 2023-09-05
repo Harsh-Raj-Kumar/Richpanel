@@ -27,20 +27,27 @@ function PlansComponent({setSelectedPlan}) {
     const navigate = useNavigate();
 
     function handlePayment() {
-        console.log('handlePayment called');
+        console.log('handlePayment called',currentSelected);
         const selectedPlan = plans[currentSelected];
         selectedPlan.planType = planType;
         selectedPlan.priceId =
             planType === 'Monthly' ? selectedPlan.mId : selectedPlan.yId;
+        // const amount = 
+        //     planType === 'Monthly' ? selectedPlan.MonthlyPrice : selectedPlan.yearlyPrice;
         setSelectedPlan(selectedPlan);
+        // console.log("Selected plan is ", selectedPlan);
+        // localStorage.setItem('current_plan',  selectedPlan.planName);
+        // localStorage.setItem('planType', planType);
+        // localStorage.setItem('amount', amount);
+       
         navigate('/payment');
     }
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get('http://localhost:8800/api/bills/getLatestOffers');
-                console.log(response.data);
+                const response = await axios.get('http://localhost:8800/api/bills/plans');
+                console.log("after fetching ",response.data);
                 setPlans(response.data.plans);
             } catch (error) {
                 console.error('Error fetching plans:', error);

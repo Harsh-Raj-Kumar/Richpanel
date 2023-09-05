@@ -22,7 +22,7 @@ function Login({setSelectedPlan}) {
       alert("Password must be atleast 6 characters long")
       return;
   }
-  console.log({email, password, remember});
+  // console.log({email, password, remember});
   try{
     // const res = await axios.post("http://localhost:8800/api/users",{email : email});
     // console.log("This is the email : ",email);
@@ -46,18 +46,8 @@ function Login({setSelectedPlan}) {
       if(res.data.msg === "User logged in successfully"){
         // console.log(res.data);
           localStorage.setItem('email', email);
-          // localStorage.setItem('username', res.data.username);
-          localStorage.setItem('current_plan', res.data.current_plan);
           localStorage.setItem('subscriptionId', res.data.subscriptionId);
           localStorage.setItem('cancelled', res.data.cancelled);
-          localStorage.setItem('planType', res.data.planType);
-          // try{
-          //   const Name = await axios.post("http://localhost:8800/api/users",email);
-          //   localStorage.setItem('username', Name);
-          //   console.log("Hi my name is :",Name);
-          // }catch(err) {
-          //    console.log("Couldn't find username in database",err);
-          // }
           if(res.data.current_plan != "Free"){
               setSelectedPlan(res.data.plan_details);
               navigate("/currentPlan");
@@ -70,7 +60,7 @@ function Login({setSelectedPlan}) {
           alert(res.data.msg);
       }
   });
-  console.log("Login");
+  // console.log("Login");
 };
 
 
